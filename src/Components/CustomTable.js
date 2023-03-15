@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import {
   TableBody,
   TableContainer,
@@ -13,6 +13,7 @@ import {
   Toolbar,
   Button,
   Tooltip,
+  Grid,
 } from "@mui/material";
 import "./CustomTable.css";
 import { hover } from "@testing-library/user-event/dist/hover";
@@ -42,20 +43,17 @@ const CustomTable = (props) => {
             {props.facultyData.map((faculty) => {
               if (faculty.courses.length !== 0) {
                 return (
-                  <TableRow
-                    key={faculty._id}
-                    sx={{
-                      "&:last-child td, &:last-child th": { border: 0 },
-                    }}
-                    hover
-                  >
-                    <TableCell>
-                      <Typography variant="body1" gutterBottom>
-                        {faculty.name}
-                      </Typography>
-                    </TableCell>
+                  <Fragment>
+                    <TableRow>
+                      <TableCell rowSpan={faculty.courses.length + 1}>
+                        <Typography variant="body1" gutterBottom>
+                          {faculty.name}
+                        </Typography>
+                      </TableCell>
+                    </TableRow>
+
                     {faculty.courses.map((course) => (
-                      <>
+                      <TableRow>
                         <TableCell>
                           <Typography variant="body1" gutterBottom>
                             {course.name}
@@ -81,9 +79,9 @@ const CustomTable = (props) => {
                             )}
                           </Stack>
                         </TableCell>
-                      </>
+                      </TableRow>
                     ))}
-                  </TableRow>
+                  </Fragment>
                 );
               }
             })}

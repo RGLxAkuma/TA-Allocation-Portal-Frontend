@@ -12,11 +12,14 @@ import secureLocalStorage from "react-secure-storage";
 import StudentInfo from "./Pages/addStudent/StudentInfo";
 import { Box, Container } from "@mui/system";
 import AllocateTA from "./Pages/AllocateTA/AllocateTA";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const auth = useAuth();
   return (
     <AuthProvider>
+      <ToastContainer></ToastContainer>
       <NavBar></NavBar>
       <Routes>
         <Route path="/login" element={<Login></Login>}></Route>

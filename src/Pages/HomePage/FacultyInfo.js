@@ -6,6 +6,9 @@ import { useState } from "react";
 import { Button } from "@mui/material";
 import { Backdrop } from "@mui/material";
 import { CircularProgress } from "@mui/material";
+import secureLocalStorage from "react-secure-storage";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function FacultyInfo() {
   const [file, setFile] = useState();
@@ -22,19 +25,41 @@ function FacultyInfo() {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("fileName", fileName);
-
+    let token = secureLocalStorage.getItem("token");
     const headers = {
       "Content-Type": "multipart/form-data",
       "Access-Control-Allow-Origin": "*",
+      authorization: `${token}`,
     };
     try {
       const res = await axios.post("http://localhost:4000/faculty", formData, {
         headers: headers,
       });
       setOpen(false);
+      console.log(res.data);
+      toast.success(`${res.data.message}`, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
       // console.log(res);
     } catch (e) {
       console.log(e);
+      toast.error(`${e.response.data.message}`, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
       setOpen(false);
     }
   };

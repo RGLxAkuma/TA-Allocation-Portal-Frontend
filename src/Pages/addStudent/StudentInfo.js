@@ -5,6 +5,8 @@ import axios from "axios";
 import { Button } from "@mui/material";
 import { Backdrop } from "@mui/material";
 import { CircularProgress } from "@mui/material";
+import secureLocalStorage from "react-secure-storage";
+import { ToastContainer, toast } from "react-toastify";
 
 function StudentInfo() {
   const [file, setFile] = useState();
@@ -20,10 +22,11 @@ function StudentInfo() {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("fileName", fileName);
-
+    let token = secureLocalStorage.getItem("token");
     const headers = {
       "Content-Type": "multipart/form-data",
       "Access-Control-Allow-Origin": "*",
+      authorization: `${token}`,
     };
     try {
       setOpen(true);
@@ -31,8 +34,28 @@ function StudentInfo() {
         headers: headers,
       });
       // console.log(res);
+      toast.success(`${res.data.message}`, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     } catch (e) {
       console.log(e);
+      toast.error(`${e.response.data.message}`, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
     setOpen(false);
   };
