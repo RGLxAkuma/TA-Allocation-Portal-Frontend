@@ -7,13 +7,14 @@ import { RequireAuth } from "./Utils/RequireAuth";
 import NavBar from "./Components/NavBar";
 import FacultyInfo from "./Pages/HomePage/FacultyInfo";
 import { useAuth } from "./Utils/auth";
-// import "bootstrap/dist/css/bootstrap.min.css";
 import secureLocalStorage from "react-secure-storage";
 import StudentInfo from "./Pages/addStudent/StudentInfo";
 import { Box, Container } from "@mui/system";
 import AllocateTA from "./Pages/AllocateTA/AllocateTA";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import AssignAdmin from "./Pages/AssignAdmin/AssignAdmin";
+import { Error } from "./Components/Error";
 
 function App() {
   const auth = useAuth();
@@ -25,7 +26,7 @@ function App() {
         <Route path="/login" element={<Login></Login>}></Route>
         <Route
           element={
-            <RequireAuth>
+            <RequireAuth role="admin,super_admin,faculty">
               <Home></Home>
             </RequireAuth>
           }
@@ -33,7 +34,7 @@ function App() {
         />
         <Route
           element={
-            <RequireAuth>
+            <RequireAuth role="admin,super_admin">
               <StudentInfo></StudentInfo>
             </RequireAuth>
           }
@@ -41,7 +42,15 @@ function App() {
         />
         <Route
           element={
-            <RequireAuth>
+            <RequireAuth role="super_admin">
+              <AssignAdmin></AssignAdmin>
+            </RequireAuth>
+          }
+          path="/assignAdmin"
+        />
+        <Route
+          element={
+            <RequireAuth role="admin,super_admin">
               <FacultyInfo></FacultyInfo>
             </RequireAuth>
           }
@@ -49,12 +58,13 @@ function App() {
         />
         <Route
           element={
-            <RequireAuth>
+            <RequireAuth role="admin,faculty">
               <AllocateTA></AllocateTA>
             </RequireAuth>
           }
           path="/addTA"
         />
+        <Route element={<Error></Error>} path="/error" />
       </Routes>
     </AuthProvider>
   );

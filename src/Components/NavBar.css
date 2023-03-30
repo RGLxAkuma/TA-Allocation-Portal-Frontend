@@ -7,8 +7,9 @@
 
 .navbar
 {
-    background-color: #303F9F;
-    padding: 5px;
+    background-color: #3F51B5;
+    padding: 0 5px;
+    height: 64px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -25,7 +26,7 @@ ul li
 
 li:hover
 {
-    background-color: #3F51B5;
+    background-color: #5266d9;
     
 }
 
@@ -46,3 +47,16 @@ li:hover
     background-color: #891a1a;
 }
 
+
+.modal__plane
+{
+    width: 450px;
+    height: 250px;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    flex-direction: column;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}

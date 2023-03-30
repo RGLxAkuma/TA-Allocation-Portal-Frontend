@@ -1,41 +1,69 @@
-import React, { useState } from "react";
-import "./StudentInfo.css";
-import { Upload } from "react-feather";
+import React, { useEffect, useState } from "react";
+import Select from "react-select";
 import axios from "axios";
-import { Button } from "@mui/material";
-import { Backdrop } from "@mui/material";
-import { CircularProgress } from "@mui/material";
 import secureLocalStorage from "react-secure-storage";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
+import { Typography, Button, Backdrop } from "@mui/material";
 import { ColorRing } from "react-loader-spinner";
-import { Typography } from "@mui/material";
+import "./AssignAdmin.css";
 
-function StudentInfo() {
-  const [file, setFile] = useState();
-  const [fileName, setFileName] = useState("");
+const AssignAdmin = () => {
+  const [facultiesList, setFacultiesList] = useState();
+  const [adminvalue, setAdminValue] = useState("");
+  const [selectedAdmin, setSelectedAdmin] = useState();
   const [open, setOpen] = useState(false);
 
-  const saveFileHandler = (e) => {
-    // console.log(e.target.files[0]);
-    setFile(e.target.files[0]);
-    setFileName(e.target.files[0].name);
+  useEffect(() => {
+    const handleCourseData = async () => {
+      try {
+        const res = await axios.get("http://localhost:4000/faculties");
+
+        // console.log(res.data.data);
+        const data = [];
+        for (let i of res.data.data) {
+          let temp = {
+            value: `${i.name}` + `(${i.email})`,
+            label: `${i.name}` + `(${i.email})`,
+          };
+          if (!i.isAdmin) {
+            data.push(temp);
+          }
+        }
+
+        setFacultiesList(data);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    handleCourseData();
+  }, []);
+
+  const assignAdminHandler = (selectedOption) => {
+    // console.log("Students", selectedOption);
+    setAdminValue(selectedOption);
+    setSelectedAdmin(selectedOption);
   };
-  const handleFileChange = async (e) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("fileName", fileName);
+
+  const assignSelectedAdminHandler = async (e) => {
+    e.preventDefault();
+
+    const body = {
+      faculty: selectedAdmin,
+    };
+
     let token = secureLocalStorage.getItem("token");
     const headers = {
-      "Content-Type": "multipart/form-data",
-      "Access-Control-Allow-Origin": "*",
       authorization: `${token}`,
     };
+
     try {
       setOpen(true);
-      const res = await axios.post("http://localhost:4000/student", formData, {
+      const res = await axios.post("http://localhost:4000/assignAdmin", body, {
         headers: headers,
       });
-      // console.log(res);
+
+      console.log(res);
+      setAdminValue("");
       toast.success(`${res.data.message}`, {
         position: "top-center",
         autoClose: 1000,
@@ -62,9 +90,9 @@ function StudentInfo() {
     setOpen(false);
   };
   return (
-    <div className="student__container">
-      <h2>Student</h2>
-      <p className="student__instruction">
+    <div className="assignAdmin__container">
+      <h2>Assign Admin</h2>
+      <p className="assignAdmin__instruction">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce massa
         lectus, placerat at vehicula vel, tincidunt at sem. Proin euismod rutrum
         quam varius gravida. Donec sed porta lectus, nec elementum orci.
@@ -76,19 +104,19 @@ function StudentInfo() {
         sed sapien et, vestibulum dapibus est. Etiam euismod mauris ac sem
         dapibus consequat.
       </p>
-
-      <label className="student__file">
-        <Upload />
-        Select File
-        <input type="file" onChange={saveFileHandler}></input>
-        {fileName && <p>| {fileName}</p>}
-      </label>
+      <Select
+        isMulti
+        options={facultiesList}
+        onChange={assignAdminHandler}
+        value={adminvalue}
+      ></Select>
       <Button
         variant="contained"
-        onClick={handleFileChange}
-        sx={{ marginTop: 2, backgroundColor: "#3F51B5" }}
+        onClick={assignSelectedAdminHandler}
+        sx={{ marginTop: 1, backgroundColor: "#3F51B5", width: "87.6px" }}
+        size="medium"
       >
-        Upload
+        Submit
       </Button>
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -106,12 +134,12 @@ function StudentInfo() {
             colors={["#3F51B5", "#3F51B5", "#3F51B5", "#3F51B5", "#3F51B5"]}
           />
           <Typography variant="h4" sx={{ color: "#BFBFBF" }}>
-            Uploading...
+            Waiting for Response...
           </Typography>
         </div>
       </Backdrop>
     </div>
   );
-}
+};
 
-export default StudentInfo;
+export default AssignAdmin;

@@ -53,7 +53,7 @@ export const AuthProvider = ({ children }) => {
         setToken(res.data.result.token);
         toast.success("Log in Succesfully", {
           position: "top-center",
-          autoClose: 5000,
+          autoClose: 1000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -65,7 +65,7 @@ export const AuthProvider = ({ children }) => {
         secureLocalStorage.setItem("isLoggedin", false);
         toast.error(`${res.data.message}`, {
           position: "top-center",
-          autoClose: 5000,
+          autoClose: 1000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -76,9 +76,9 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (e) {
       console.log(e);
-      toast.error("Something Went Wrong", {
+      toast.error("Something Went Wrong Please Try Again Later", {
         position: "top-center",
-        autoClose: 5000,
+        autoClose: 1000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,

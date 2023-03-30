@@ -9,6 +9,8 @@ import { CircularProgress } from "@mui/material";
 import secureLocalStorage from "react-secure-storage";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { ColorRing } from "react-loader-spinner";
+import { Typography } from "@mui/material";
 
 function FacultyInfo() {
   const [file, setFile] = useState();
@@ -39,7 +41,7 @@ function FacultyInfo() {
       console.log(res.data);
       toast.success(`${res.data.message}`, {
         position: "top-center",
-        autoClose: 5000,
+        autoClose: 1000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -52,7 +54,7 @@ function FacultyInfo() {
       console.log(e);
       toast.error(`${e.response.data.message}`, {
         position: "top-center",
-        autoClose: 5000,
+        autoClose: 1000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -96,7 +98,21 @@ function FacultyInfo() {
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={open}
       >
-        <CircularProgress color="inherit" />
+        {/* <CircularProgress color="inherit" /> */}
+        <div className="modal__plane">
+          <ColorRing
+            visible={true}
+            height="80"
+            width="80"
+            ariaLabel="blocks-loading"
+            wrapperStyle={{}}
+            wrapperClass="blocks-wrapper"
+            colors={["#3F51B5", "#3F51B5", "#3F51B5", "#3F51B5", "#3F51B5"]}
+          />
+          <Typography variant="h4" sx={{ color: "#BFBFBF" }}>
+            Uploading...
+          </Typography>
+        </div>
       </Backdrop>
     </div>
   );

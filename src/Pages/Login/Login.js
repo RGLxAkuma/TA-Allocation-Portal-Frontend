@@ -1,6 +1,7 @@
 import React from "react";
 import { GoogleLogin } from "@react-oauth/google";
 import "./LogIn.css";
+import Bg from "./Components/Bg";
 
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../Utils/auth";
@@ -13,7 +14,7 @@ function Login(props) {
 
   return (
     <div className="logIn">
-      <h1>Login</h1>
+      <Bg></Bg>
     </div>
   );
 }

@@ -8,6 +8,8 @@ import CustomTable from "../../Components/CustomTable";
 import "./AllocateTA.css";
 import { Typography, Button } from "@mui/material";
 import { toast } from "react-toastify";
+import { ColorRing } from "react-loader-spinner";
+import { Backdrop } from "@mui/material";
 
 const AllocateTA = () => {
   const [corses, setCourses] = useState();
@@ -21,6 +23,7 @@ const AllocateTA = () => {
   const [allocStValue, setAllocStValue] = useState("");
   const [selectedAllocStudents, setSelectedAllocStudents] = useState();
   const [rollNumber, setRollNumber] = useState();
+  const [open, setOpen] = useState(false);
 
   const facEmail = JSON.parse(secureLocalStorage.getItem("user")).email;
 
@@ -119,18 +122,37 @@ const AllocateTA = () => {
     const headers = {
       authorization: `${token}`,
     };
-
+    let res;
+    setOpen(true);
     try {
-      const res = await axios.post("http://localhost:4000/addta", body, {
+      res = await axios.post("http://localhost:4000/addta", body, {
         headers: headers,
       });
 
-      console.log(res);
+      // console.log(res);
+
+      let stdData = [];
+      let stdData1 = [];
+      for (let i of res.data.result.data2) {
+        let temp = {
+          value: `${i.name}` + `(${i.rollNumber})`,
+          label: `${i.name}` + `(${i.rollNumber})`,
+        };
+        if (i.isAssgined) {
+          stdData1.push(temp);
+        } else {
+          stdData.push(temp);
+        }
+      }
+
+      setStudentData(stdData);
+      setAllocStudentData(stdData1);
       setCrValue("");
       setStValue("");
-      toast.success("Allocation Succesful", {
+      setFacultyData(res.data.result.data1);
+      toast.success(`${res.data.message}`, {
         position: "top-center",
-        autoClose: 5000,
+        autoClose: 1000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -138,12 +160,14 @@ const AllocateTA = () => {
         progress: undefined,
         theme: "light",
       });
-      window.location.reload();
+
+      // console.log(res.data.result.data);
+      // window.location.reload();
     } catch (e) {
       console.log(e);
       toast.error(`${e.response.data.message}`, {
         position: "top-center",
-        autoClose: 5000,
+        autoClose: 1000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -152,6 +176,7 @@ const AllocateTA = () => {
         theme: "light",
       });
     }
+    setOpen(false);
   };
 
   const deleteTAHandler = async (e) => {
@@ -164,18 +189,35 @@ const AllocateTA = () => {
     const headers = {
       authorization: `${token}`,
     };
-
+    setOpen(true);
     try {
       const res = await axios.post("http://localhost:4000/removeTA", body, {
         headers: headers,
       });
       // console.log(res);
 
-      setAllocStValue("");
+      let stdData = [];
+      let stdData1 = [];
+      for (let i of res.data.result.data2) {
+        let temp = {
+          value: `${i.name}` + `(${i.rollNumber})`,
+          label: `${i.name}` + `(${i.rollNumber})`,
+        };
+        if (i.isAssgined) {
+          stdData1.push(temp);
+        } else {
+          stdData.push(temp);
+        }
+      }
 
-      toast.success("Student Has Been Removed", {
+      setStudentData(stdData);
+      setAllocStudentData(stdData1);
+      setAllocStValue("");
+      setFacultyData(res.data.result.data1);
+
+      toast.success(`${res.data.message}`, {
         position: "top-center",
-        autoClose: 5000,
+        autoClose: 1000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -183,13 +225,11 @@ const AllocateTA = () => {
         progress: undefined,
         theme: "light",
       });
-
-      window.location.reload();
     } catch (error) {
       console.log(error);
       toast.error(`${error.response.data.message}`, {
         position: "top-center",
-        autoClose: 5000,
+        autoClose: 1000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -198,6 +238,7 @@ const AllocateTA = () => {
         theme: "light",
       });
     }
+    setOpen(false);
   };
 
   return (
@@ -251,6 +292,26 @@ const AllocateTA = () => {
           </div>
         )}
       </div>
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={open}
+      >
+        {/* <CircularProgress color="inherit" /> */}
+        <div className="modal__plane">
+          <ColorRing
+            visible={true}
+            height="80"
+            width="80"
+            ariaLabel="blocks-loading"
+            wrapperStyle={{}}
+            wrapperClass="blocks-wrapper"
+            colors={["#3F51B5", "#3F51B5", "#3F51B5", "#3F51B5", "#3F51B5"]}
+          />
+          <Typography variant="h4" sx={{ color: "#BFBFBF" }}>
+            Waiting for Response...
+          </Typography>
+        </div>
+      </Backdrop>
     </div>
   );
 };

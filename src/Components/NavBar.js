@@ -4,7 +4,7 @@ import { useAuth } from "../Utils/auth";
 import "./NavBar.css";
 import { googleLogout } from "@react-oauth/google";
 import { GoogleLogin } from "@react-oauth/google";
-import { Backdrop } from "@mui/material";
+import { Backdrop, IconButton } from "@mui/material";
 import { CircularProgress } from "@mui/material";
 import { Navigate, useLocation } from "react-router-dom";
 import secureLocalStorage from "react-secure-storage";
@@ -12,6 +12,7 @@ import { LogOut } from "react-feather";
 import { AppBar, Button, Toolbar, Typography } from "@mui/material";
 import { Stack } from "@mui/system";
 import { ToastContainer, toast } from "react-toastify";
+import { ColorRing } from "react-loader-spinner";
 
 function NavBar() {
   const auth = useAuth();
@@ -60,7 +61,7 @@ function NavBar() {
     auth.logout();
     toast.success("Log out Succesfully", {
       position: "top-center",
-      autoClose: 5000,
+      autoClose: 1000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
@@ -73,6 +74,17 @@ function NavBar() {
   return (
     <nav>
       <ul className="navbar">
+        <Button className="logo" sx={{ position: "absolute", left: "15px" }}>
+          <Typography
+            sx={{
+              color: "#fff",
+              fontSize: "24px",
+            }}
+          >
+            IIT PALAKKAD
+          </Typography>
+        </Button>
+
         {secureLocalStorage.getItem("isLoggedin") ? (
           <li>
             <Link className="link" to="/">
@@ -82,7 +94,9 @@ function NavBar() {
         ) : (
           <></>
         )}
-        {secureLocalStorage.getItem("isLoggedin") ? (
+        {secureLocalStorage.getItem("isLoggedin") &&
+        (secureLocalStorage.getItem("role") === "admin" ||
+          secureLocalStorage.getItem("role") === "faculty") ? (
           <li>
             <Link className="link" to="/addTA">
               Allocate TA
@@ -93,7 +107,19 @@ function NavBar() {
         )}
 
         {secureLocalStorage.getItem("isLoggedin") &&
-        secureLocalStorage.getItem("role") === "admin" ? (
+        secureLocalStorage.getItem("role") === "super_admin" ? (
+          <li>
+            <Link className="link" to="/assignAdmin">
+              Assign Admin
+            </Link>
+          </li>
+        ) : (
+          <></>
+        )}
+
+        {secureLocalStorage.getItem("isLoggedin") &&
+        (secureLocalStorage.getItem("role") === "admin" ||
+          secureLocalStorage.getItem("role") === "super_admin") ? (
           <li>
             <Link className="link" to="/student">
               Add Student
@@ -104,7 +130,8 @@ function NavBar() {
         )}
 
         {secureLocalStorage.getItem("isLoggedin") &&
-        secureLocalStorage.getItem("role") === "admin" ? (
+        (secureLocalStorage.getItem("role") === "admin" ||
+          secureLocalStorage.getItem("role") === "super_admin") ? (
           <li>
             <Link className="link" to="/faculty">
               Add Faculty
@@ -128,11 +155,39 @@ function NavBar() {
               sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
               open={open}
             >
-              <CircularProgress color="inherit" />
+              {/* <CircularProgress color="inherit" /> */}
+              <div className="modal__plane">
+                <ColorRing
+                  visible={true}
+                  height="80"
+                  width="80"
+                  ariaLabel="blocks-loading"
+                  wrapperStyle={{}}
+                  wrapperClass="blocks-wrapper"
+                  colors={[
+                    "#3F51B5",
+                    "#3F51B5",
+                    "#3F51B5",
+                    "#3F51B5",
+                    "#3F51B5",
+                  ]}
+                />
+                <Typography variant="h4" sx={{ color: "#BFBFBF" }}>
+                  Logging In...
+                </Typography>
+              </div>
             </Backdrop>
           </li>
         )}
         {auth.user && (
+          // <IconButton
+          //   sx={{ backgroundColor: "#C62828" , }}
+          //   aria-label="delete"
+          //   size="medium"
+          //   onClick={logoutHandler}
+          // >
+          //   <LogOut />
+          // </IconButton>
           <Button
             size="medium"
             variant="contained"
