@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./StudentInfo.css";
+import "./DepartmentInfo.css";
 import { Upload } from "react-feather";
 import axios from "axios";
 import { Button } from "@mui/material";
@@ -10,10 +10,9 @@ import { ToastContainer, toast } from "react-toastify";
 import { ColorRing } from "react-loader-spinner";
 import { Typography } from "@mui/material";
 import CheckModal from "../../Components/CheckModal";
-import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
-function StudentInfo() {
+const DepartmentInfo = () => {
   const [file, setFile] = useState();
   const [fileName, setFileName] = useState("");
   const [open, setOpen] = useState(false);
@@ -21,6 +20,22 @@ function StudentInfo() {
 
   const changeChkModalHandler = (opt) => {
     setChkOpen(opt);
+  };
+
+  const handleDownloadFile = () => {
+    try {
+      const link = document.createElement("a");
+      link.href = "http://localhost:4000/file/Department.xlsx";
+      link.setAttribute("download", `Department.xlsx`);
+
+      document.body.appendChild(link);
+
+      link.click();
+
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const deleteDataHandler = async () => {
@@ -31,7 +46,7 @@ function StudentInfo() {
       authorization: `${token}`,
     };
     try {
-      const res = await axios.delete("http://localhost:4000/student/all", {
+      const res = await axios.delete("http://localhost:4000/department/all", {
         headers: headers,
       });
       console.log(res);
@@ -61,25 +76,6 @@ function StudentInfo() {
     setOpen(false);
   };
 
-  const handleDownloadFile = () => {
-    try {
-      const link = document.createElement("a");
-      link.href = "http://localhost:4000/file/Student.xlsx";
-      link.setAttribute("download", `Student.xlsx`);
-
-      // Append to html link element page
-      document.body.appendChild(link);
-
-      // Start download
-      link.click();
-
-      // Clean up and remove the link
-      link.parentNode.removeChild(link);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const saveFileHandler = (e) => {
     // console.log(e.target.files[0]);
     setFile(e.target.files[0]);
@@ -97,9 +93,13 @@ function StudentInfo() {
     };
     try {
       setOpen(true);
-      const res = await axios.post("http://localhost:4000/student", formData, {
-        headers: headers,
-      });
+      const res = await axios.post(
+        "http://localhost:4000/departments",
+        formData,
+        {
+          headers: headers,
+        }
+      );
       // console.log(res);
       toast.success(`${res.data.message}`, {
         position: "top-center",
@@ -125,16 +125,18 @@ function StudentInfo() {
       });
     }
     setOpen(false);
+    setFile(null);
+    setFileName("");
   };
   return (
     <motion.div
-      className="student__container"
+      className="department__container"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, transition: { duration: 0.5 } }}
     >
-      <h2>Student</h2>
-      <p className="student__instruction">
+      <h2>Department</h2>
+      <p className="department__instruction">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce massa
         lectus, placerat at vehicula vel, tincidunt at sem. Proin euismod rutrum
         quam varius gravida. Donec sed porta lectus, nec elementum orci.
@@ -147,7 +149,7 @@ function StudentInfo() {
         dapibus consequat.
       </p>
 
-      <label className="student__file">
+      <label className="department__file">
         <Upload />
         Select File
         <input type="file" onChange={saveFileHandler}></input>
@@ -202,11 +204,11 @@ function StudentInfo() {
       <CheckModal
         chkOpen={chkOpen}
         changeChkModalHandler={changeChkModalHandler}
-        str="Delete all Student Data?"
+        str="Delete all Department Data?"
         deleteDataHandler={deleteDataHandler}
       ></CheckModal>
     </motion.div>
   );
-}
+};
 
-export default StudentInfo;
+export default DepartmentInfo;

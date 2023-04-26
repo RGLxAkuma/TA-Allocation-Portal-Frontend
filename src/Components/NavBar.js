@@ -116,6 +116,16 @@ function NavBar() {
         ) : (
           <></>
         )}
+        {secureLocalStorage.getItem("isLoggedin") &&
+        secureLocalStorage.getItem("role") === "super_admin" ? (
+          <li>
+            <Link className="link" to="/department">
+              Add Departments
+            </Link>
+          </li>
+        ) : (
+          <></>
+        )}
 
         {secureLocalStorage.getItem("isLoggedin") &&
         (secureLocalStorage.getItem("role") === "admin" ||
@@ -194,7 +204,7 @@ function NavBar() {
             color="error"
             onClick={logoutHandler}
           >
-            <LogOut />
+            LOG OUT
           </Button>
         )}
       </ul>

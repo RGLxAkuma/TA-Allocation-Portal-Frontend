@@ -10,6 +10,7 @@ import { Typography, Button } from "@mui/material";
 import { toast } from "react-toastify";
 import { ColorRing } from "react-loader-spinner";
 import { Backdrop } from "@mui/material";
+import { motion } from "framer-motion";
 
 const AllocateTA = () => {
   const [corses, setCourses] = useState();
@@ -26,16 +27,24 @@ const AllocateTA = () => {
   const [open, setOpen] = useState(false);
 
   const facEmail = JSON.parse(secureLocalStorage.getItem("user")).email;
+  const facDepartment = secureLocalStorage.getItem("department");
 
   useEffect(() => {
     const handleCourseData = async () => {
       const body = {
         email: facEmail,
       };
+      let token = secureLocalStorage.getItem("token");
+      const headers = {
+        authorization: `${token}`,
+      };
       try {
         const response = await axios.post(
           "http://localhost:4000/faculty/courses",
-          body
+          body,
+          {
+            headers: headers,
+          }
         );
 
         // console.log(response.data.data);
@@ -53,7 +62,9 @@ const AllocateTA = () => {
       }
 
       try {
-        const response = await axios.get("http://localhost:4000/students");
+        const response = await axios.get("http://localhost:4000/students", {
+          headers: headers,
+        });
 
         // console.log(response.data.data);
         let stdData = [];
@@ -64,7 +75,9 @@ const AllocateTA = () => {
             label: `${i.name}` + `(${i.rollNumber})`,
           };
           if (i.isAssgined) {
-            stdData1.push(temp);
+            if (i.assignedFaculty.department === facDepartment) {
+              stdData1.push(temp);
+            }
           } else {
             stdData.push(temp);
           }
@@ -77,7 +90,9 @@ const AllocateTA = () => {
       }
 
       try {
-        const res = await axios.get("http://localhost:4000/faculties");
+        const res = await axios.get("http://localhost:4000/faculties", {
+          headers: headers,
+        });
 
         // console.log(res.data.data);
 
@@ -242,7 +257,12 @@ const AllocateTA = () => {
   };
 
   return (
-    <div className="ta__container">
+    <motion.div
+      className="ta__container"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0, transition: { duration: 0.5 } }}
+    >
       <CustomTable facultyData={facultyData}></CustomTable>
       <div className="ta__form">
         <Typography variant="subtitle1" gutterBottom>
@@ -312,7 +332,7 @@ const AllocateTA = () => {
           </Typography>
         </div>
       </Backdrop>
-    </div>
+    </motion.div>
   );
 };
 

@@ -11,11 +11,72 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ColorRing } from "react-loader-spinner";
 import { Typography } from "@mui/material";
+import CheckModal from "../../Components/CheckModal";
+import { motion } from "framer-motion";
 
 function FacultyInfo() {
   const [file, setFile] = useState();
   const [fileName, setFileName] = useState("");
   const [open, setOpen] = useState(false);
+  const [chkOpen, setChkOpen] = useState(false);
+
+  const changeChkModalHandler = (opt) => {
+    setChkOpen(opt);
+  };
+
+  const handleDownloadFile = () => {
+    try {
+      const link = document.createElement("a");
+      link.href = "http://localhost:4000/file/Faculty.xlsx";
+      link.setAttribute("download", `Faculty.xlsx`);
+
+      document.body.appendChild(link);
+
+      link.click();
+
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteDataHandler = async () => {
+    setChkOpen(false);
+    setOpen(true);
+    let token = secureLocalStorage.getItem("token");
+    const headers = {
+      authorization: `${token}`,
+    };
+    try {
+      const res = await axios.delete("http://localhost:4000/faculty/all", {
+        headers: headers,
+      });
+      console.log(res);
+      toast.success(`${res.data.message}`, {
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    } catch (error) {
+      console.log(error);
+      toast.error(`${error.response.data.message}`, {
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+    setOpen(false);
+  };
 
   const saveFileHandler = (e) => {
     // console.log(e.target.files[0]);
@@ -66,7 +127,12 @@ function FacultyInfo() {
     }
   };
   return (
-    <div className="faculty__container">
+    <motion.div
+      className="faculty__container"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0, transition: { duration: 0.5 } }}
+    >
       <h2>Faculty</h2>
       <p className="faculty__instruction">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce massa
@@ -87,13 +153,32 @@ function FacultyInfo() {
         <input type="file" onChange={saveFileHandler}></input>
         {fileName && <p>| {fileName}</p>}
       </label>
-      <Button
-        variant="contained"
-        onClick={handleFileChange}
-        sx={{ marginTop: 2, backgroundColor: "#3F51B5" }}
-      >
-        Upload
-      </Button>
+      <div className="btn__div">
+        <Button
+          variant="contained"
+          onClick={handleFileChange}
+          sx={{ marginTop: 2, backgroundColor: "#3F51B5" }}
+        >
+          Upload
+        </Button>
+        <Button
+          variant="contained"
+          onClick={handleDownloadFile}
+          sx={{ marginTop: 2, backgroundColor: "#3F51B5" }}
+        >
+          Download
+        </Button>
+        {secureLocalStorage.getItem("role") == "super_admin" && (
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => setChkOpen(true)}
+            sx={{ marginTop: 2 }}
+          >
+            Delete All
+          </Button>
+        )}
+      </div>
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={open}
@@ -110,11 +195,17 @@ function FacultyInfo() {
             colors={["#3F51B5", "#3F51B5", "#3F51B5", "#3F51B5", "#3F51B5"]}
           />
           <Typography variant="h4" sx={{ color: "#BFBFBF" }}>
-            Uploading...
+            Waiting for Response...
           </Typography>
         </div>
       </Backdrop>
-    </div>
+      <CheckModal
+        chkOpen={chkOpen}
+        changeChkModalHandler={changeChkModalHandler}
+        str="Delete all Faculty Data?"
+        deleteDataHandler={deleteDataHandler}
+      ></CheckModal>
+    </motion.div>
   );
 }
 
