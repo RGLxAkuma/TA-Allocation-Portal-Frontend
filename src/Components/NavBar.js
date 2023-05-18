@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, NavLink } from "react-router-dom";
 import { useAuth } from "../Utils/auth";
 import "./NavBar.css";
 import { googleLogout } from "@react-oauth/google";
@@ -86,10 +86,10 @@ function NavBar() {
         </Button>
 
         {secureLocalStorage.getItem("isLoggedin") ? (
-          <li>
-            <Link className="link" to="/">
+          <li className="navigation">
+            <NavLink className="link" to="/" activeClassName="active">
               Home
-            </Link>
+            </NavLink>
           </li>
         ) : (
           <></>
@@ -97,10 +97,10 @@ function NavBar() {
         {secureLocalStorage.getItem("isLoggedin") &&
         (secureLocalStorage.getItem("role") === "admin" ||
           secureLocalStorage.getItem("role") === "faculty") ? (
-          <li>
-            <Link className="link" to="/addTA">
+          <li className="navigation">
+            <NavLink className="link" to="/addTA" activeClassName="active">
               Allocate TA
-            </Link>
+            </NavLink>
           </li>
         ) : (
           <></>
@@ -108,20 +108,24 @@ function NavBar() {
 
         {secureLocalStorage.getItem("isLoggedin") &&
         secureLocalStorage.getItem("role") === "super_admin" ? (
-          <li>
-            <Link className="link" to="/assignAdmin">
+          <li className="navigation">
+            <NavLink
+              className="link"
+              to="/assignAdmin"
+              activeClassName="active"
+            >
               Assign Admin
-            </Link>
+            </NavLink>
           </li>
         ) : (
           <></>
         )}
         {secureLocalStorage.getItem("isLoggedin") &&
         secureLocalStorage.getItem("role") === "super_admin" ? (
-          <li>
-            <Link className="link" to="/department">
+          <li className="navigation">
+            <NavLink className="link" to="/department" activeClassName="active">
               Add Departments
-            </Link>
+            </NavLink>
           </li>
         ) : (
           <></>
@@ -130,10 +134,10 @@ function NavBar() {
         {secureLocalStorage.getItem("isLoggedin") &&
         (secureLocalStorage.getItem("role") === "admin" ||
           secureLocalStorage.getItem("role") === "super_admin") ? (
-          <li>
-            <Link className="link" to="/student">
+          <li className="navigation">
+            <NavLink className="link" to="/student" activeClassName="active">
               Add Student
-            </Link>
+            </NavLink>
           </li>
         ) : (
           <></>
@@ -142,17 +146,17 @@ function NavBar() {
         {secureLocalStorage.getItem("isLoggedin") &&
         (secureLocalStorage.getItem("role") === "admin" ||
           secureLocalStorage.getItem("role") === "super_admin") ? (
-          <li>
-            <Link className="link" to="/faculty">
+          <li className="navigation">
+            <NavLink className="link" to="/faculty" activeClassName="active">
               Add Faculty
-            </Link>
+            </NavLink>
           </li>
         ) : (
           <></>
         )}
 
         {!auth.user && (
-          <li>
+          <li className="navigation">
             <GoogleLogin
               onSuccess={logInHandler}
               onError={() => {

@@ -144,18 +144,37 @@ const AssignAdmin = () => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, transition: { duration: 0.5 } }}
     >
-      <h2>Assign Admin</h2>
+      {/* <h2>Assign Admin</h2> */}
       <p className="assignAdmin__instruction">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce massa
-        lectus, placerat at vehicula vel, tincidunt at sem. Proin euismod rutrum
-        quam varius gravida. Donec sed porta lectus, nec elementum orci.
-        Maecenas id euismod sapien. Cras tellus tellus, molestie sed ligula vel,
-        elementum faucibus urna. Nullam vel molestie ipsum. Nunc auctor, nunc id
-        lacinia bibendum, mi ligula varius nisl, vitae pharetra neque velit sed
-        justo. Vestibulum sit amet nisl ante. Etiam non elit sed massa dictum
-        tincidunt. Sed pharetra leo id rutrum ornare. Nulla dolor augue, auctor
-        sed sapien et, vestibulum dapibus est. Etiam euismod mauris ac sem
-        dapibus consequat.
+        <div className="faculty__instruction">
+          <b> Welcome</b> to the Assign Admin page of the TA Allocation Portal!
+          <p>
+            To assign admins to the system, you will need to select admins from
+            the <b>dropdown</b> options available for <b>each department</b>.
+            The assigned admins will have <b>administrative</b> privileges for
+            their respective departments.
+          </p>
+          <p>
+            Here are the steps to follow to assign Admins:
+            <ul className="AddAdmin">
+              <li>
+                Select the desired department from the dropdown list for which
+                you want to assign admin
+              </li>
+
+              <li>
+                Once you have selected the department, you will see another
+                dropdown option below it. Click on this dropdown and select the
+                admin from the available options for the selected department.
+              </li>
+
+              <li>
+                After selecting the admin, click on the "<b>Assign Admin</b>"
+                button to assign the admin to the selected department.
+              </li>
+            </ul>
+          </p>
+        </div>
       </p>
       <div className="ta__form">
         <Typography variant="subtitle1" gutterBottom>

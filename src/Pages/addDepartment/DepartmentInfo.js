@@ -11,6 +11,7 @@ import { ColorRing } from "react-loader-spinner";
 import { Typography } from "@mui/material";
 import CheckModal from "../../Components/CheckModal";
 import { motion } from "framer-motion";
+import InstructionDep from "./InstructionDep";
 
 const DepartmentInfo = () => {
   const [file, setFile] = useState();
@@ -135,19 +136,8 @@ const DepartmentInfo = () => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, transition: { duration: 0.5 } }}
     >
-      <h2>Department</h2>
-      <p className="department__instruction">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce massa
-        lectus, placerat at vehicula vel, tincidunt at sem. Proin euismod rutrum
-        quam varius gravida. Donec sed porta lectus, nec elementum orci.
-        Maecenas id euismod sapien. Cras tellus tellus, molestie sed ligula vel,
-        elementum faucibus urna. Nullam vel molestie ipsum. Nunc auctor, nunc id
-        lacinia bibendum, mi ligula varius nisl, vitae pharetra neque velit sed
-        justo. Vestibulum sit amet nisl ante. Etiam non elit sed massa dictum
-        tincidunt. Sed pharetra leo id rutrum ornare. Nulla dolor augue, auctor
-        sed sapien et, vestibulum dapibus est. Etiam euismod mauris ac sem
-        dapibus consequat.
-      </p>
+      {/* <h2>Department</h2> */}
+      <InstructionDep></InstructionDep>
 
       <label className="department__file">
         <Upload />

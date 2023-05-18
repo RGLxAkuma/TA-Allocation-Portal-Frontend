@@ -12,6 +12,7 @@ import { Typography } from "@mui/material";
 import CheckModal from "../../Components/CheckModal";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import InstructionStd from "./InstructionStd";
 
 function StudentInfo() {
   const [file, setFile] = useState();
@@ -133,19 +134,8 @@ function StudentInfo() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, transition: { duration: 0.5 } }}
     >
-      <h2>Student</h2>
-      <p className="student__instruction">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce massa
-        lectus, placerat at vehicula vel, tincidunt at sem. Proin euismod rutrum
-        quam varius gravida. Donec sed porta lectus, nec elementum orci.
-        Maecenas id euismod sapien. Cras tellus tellus, molestie sed ligula vel,
-        elementum faucibus urna. Nullam vel molestie ipsum. Nunc auctor, nunc id
-        lacinia bibendum, mi ligula varius nisl, vitae pharetra neque velit sed
-        justo. Vestibulum sit amet nisl ante. Etiam non elit sed massa dictum
-        tincidunt. Sed pharetra leo id rutrum ornare. Nulla dolor augue, auctor
-        sed sapien et, vestibulum dapibus est. Etiam euismod mauris ac sem
-        dapibus consequat.
-      </p>
+      {/* <h2>Student</h2> */}
+      <InstructionStd></InstructionStd>
 
       <label className="student__file">
         <Upload />
