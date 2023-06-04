@@ -1,6 +1,7 @@
 import { Route, Routes, useLocation } from "react-router-dom";
 import "./App.css";
 import Home from "./Pages/Home/Home";
+import Profile from "./Pages/Profile/ProfilePage"
 import Login from "./Pages/Login/Login";
 import { AuthProvider } from "./Utils/auth";
 import { RequireAuth } from "./Utils/RequireAuth";
@@ -34,6 +35,14 @@ function App() {
               </RequireAuth>
             }
             path="/"
+          />
+          <Route
+            element={
+              <RequireAuth role="admin,faculty,readOnly">
+                <Profile></Profile>
+              </RequireAuth>
+            }
+            path="/profile"
           />
           <Route
             element={

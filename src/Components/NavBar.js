@@ -26,14 +26,13 @@ function NavBar() {
     /* global google */
     // const client = google.accounts.oauth2.initTokenClient({
     //   client_id:
-    //     "437720385016-4b6pgdkgbn55m8ifo7gif60lndkkehu2.apps.googleusercontent.com",
+    //    
     //   scope: "https://www.googleapis.com/auth/calendar.readonly",
     //   callback: testHandler,
     // });
     // client.requestAccessToken();
     // google.accounts.id.initialize({
     //   client_id:
-    //     "437720385016-4b6pgdkgbn55m8ifo7gif60lndkkehu2.apps.googleusercontent.com",
     // });
   }, []);
 
@@ -87,7 +86,10 @@ function NavBar() {
 
         {secureLocalStorage.getItem("isLoggedin") ? (
           <li className="navigation">
-            <NavLink className="link" to="/" activeClassName="active">
+            <NavLink
+              className={({ isActive }) => (isActive ? "active" : "link")}
+              to="/"
+            >
               Home
             </NavLink>
           </li>
@@ -98,7 +100,8 @@ function NavBar() {
         (secureLocalStorage.getItem("role") === "admin" ||
           secureLocalStorage.getItem("role") === "faculty") ? (
           <li className="navigation">
-            <NavLink className="link" to="/addTA" activeClassName="active">
+            <NavLink className={({ isActive }) => (isActive ? "active" : "link")}
+              to="/addTA" >
               Allocate TA
             </NavLink>
           </li>
@@ -110,9 +113,8 @@ function NavBar() {
         secureLocalStorage.getItem("role") === "super_admin" ? (
           <li className="navigation">
             <NavLink
-              className="link"
+              className={({ isActive }) => (isActive ? "active" : "link")}
               to="/assignAdmin"
-              activeClassName="active"
             >
               Assign Admin
             </NavLink>
@@ -123,7 +125,8 @@ function NavBar() {
         {secureLocalStorage.getItem("isLoggedin") &&
         secureLocalStorage.getItem("role") === "super_admin" ? (
           <li className="navigation">
-            <NavLink className="link" to="/department" activeClassName="active">
+            <NavLink className={({ isActive }) => (isActive ? "active" : "link")}
+               to="/department">
               Add Departments
             </NavLink>
           </li>
@@ -135,7 +138,8 @@ function NavBar() {
         (secureLocalStorage.getItem("role") === "admin" ||
           secureLocalStorage.getItem("role") === "super_admin") ? (
           <li className="navigation">
-            <NavLink className="link" to="/student" activeClassName="active">
+            <NavLink className={({ isActive }) => (isActive ? "active" : "link")}
+               to="/student">
               Add Student
             </NavLink>
           </li>
@@ -147,8 +151,21 @@ function NavBar() {
         (secureLocalStorage.getItem("role") === "admin" ||
           secureLocalStorage.getItem("role") === "super_admin") ? (
           <li className="navigation">
-            <NavLink className="link" to="/faculty" activeClassName="active">
+            <NavLink className={({ isActive }) => (isActive ? "active" : "link")}
+               to="/faculty">
               Add Faculty
+            </NavLink>
+          </li>
+        ) : (
+          <></>
+        )}
+
+        {secureLocalStorage.getItem("isLoggedin") &&
+        (secureLocalStorage.getItem("role") === "admin" ||
+          secureLocalStorage.getItem("role") === "faculty") ? (
+          <li className="navigation">
+            <NavLink className={({ isActive }) => (isActive ? "active" : "link")} to="/profile">
+              Profile
             </NavLink>
           </li>
         ) : (

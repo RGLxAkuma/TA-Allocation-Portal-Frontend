@@ -134,7 +134,7 @@ function FacultyInfo() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, transition: { duration: 0.5 } }}
     >
-      {/* <h2>Faculty</h2> */}
+      <h2>Faculty</h2>
       <InstructionFac></InstructionFac>
 
       <label className="faculty__file">

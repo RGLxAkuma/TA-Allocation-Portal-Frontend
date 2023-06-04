@@ -29,7 +29,7 @@ const AssignAdmin = () => {
           headers: headers,
         });
 
-        // console.log(res.data.data);
+        //console.log(res.data.data);
         const data = [];
         for (let i of res.data.data) {
           let temp = {
@@ -52,7 +52,7 @@ const AssignAdmin = () => {
           headers: headers,
         });
 
-        // console.log(res.data.data);
+         //console.log(res.data.data);
         const data = [];
         for (let i of res.data.data) {
           let temp = {
@@ -144,8 +144,7 @@ const AssignAdmin = () => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, transition: { duration: 0.5 } }}
     >
-      {/* <h2>Assign Admin</h2> */}
-      <p className="assignAdmin__instruction">
+      
         <div className="faculty__instruction">
           <b> Welcome</b> to the Assign Admin page of the TA Allocation Portal!
           <p>
@@ -175,7 +174,7 @@ const AssignAdmin = () => {
             </ul>
           </p>
         </div>
-      </p>
+     
       <div className="ta__form">
         <Typography variant="subtitle1" gutterBottom>
           Choose Department:
